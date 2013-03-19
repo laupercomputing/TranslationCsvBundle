@@ -41,8 +41,7 @@ class YamlDriverTest extends WebTestCase
     public function getYamlArray()
     {
         file_put_contents(vfsStream::url('exampleDir') . '/testfile.yml', $this->getYamlContent());
-        
-        $file = $this->getMock('Symfony\Component\HttpFoundation\File\File', array(), array(), '', false);
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getRealPath')
             ->will($this->returnValue(vfsStream::url('exampleDir') . '/testfile.yml'));

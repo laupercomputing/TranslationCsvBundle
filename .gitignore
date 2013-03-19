@@ -1,6 +1,7 @@
 vendor/
 composer.lock
 
+/bin
 /manifests
 /Vagrantfile
 /vres

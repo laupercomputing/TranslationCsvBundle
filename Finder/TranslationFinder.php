@@ -7,7 +7,7 @@ use Symfony\Component\Finder\Finder;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 use LPC\TranslationCsvBundle\Translation;
-
+use Symfony\Component\Finder\SplFileInfo;
 /**
  * Translation Finder
  * 
@@ -55,7 +55,7 @@ class TranslationFinder
      * @param translationArray $array
      * @return array
      */
-    public function getTranslations(File $file, $translationArray = array())
+    public function getTranslations(SplFileInfo $file, $translationArray = array())
     {
         $fileInfos = explode('.', $file->getBasename());
         $domain = $fileInfos[0];

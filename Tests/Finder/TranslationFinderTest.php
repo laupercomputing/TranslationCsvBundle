@@ -134,7 +134,7 @@ class TranslationFinderTest extends WebTestCase
                 
             ->will($this->returnValue(array('test.test' => 'blapp')));
 
-        $file = $this->getMock('Symfony\Component\HttpFoundation\File\File', array(), array(), '', false);
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('test.en.yml'));
@@ -177,7 +177,7 @@ class TranslationFinderTest extends WebTestCase
             ->method('parse')
             ->will($this->returnValue(array('test.test' => 'blupp')));
 
-        $file = $this->getMock('Symfony\Component\HttpFoundation\File\File', array(), array(), '', false);
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('test.fr.yml'));
@@ -216,7 +216,7 @@ class TranslationFinderTest extends WebTestCase
             ->method('parse')
             ->will($this->returnValue(array('test.test' => 'blupp')));
 
-        $file = $this->getMock('Symfony\Component\HttpFoundation\File\File', array(), array(), '', false);
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('blah.en.yml'));
@@ -245,7 +245,7 @@ class TranslationFinderTest extends WebTestCase
             ->method('parse')
             ->will($this->returnValue(array('test.test' => 'blupp')));
 
-        $file = $this->getMock('Symfony\Component\HttpFoundation\File\File', array(), array(), '', false);
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('blah.en.yml'));
