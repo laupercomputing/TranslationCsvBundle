@@ -3,6 +3,7 @@
 namespace LPC\TranslationCsvBundle\Finder\Driver;
 
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * YamlDriver
@@ -21,9 +22,9 @@ class YamlDriver implements Driver
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\File\File $file
+     * @param SplFileInfo $file
      */
-    public function parse(\Symfony\Component\HttpFoundation\File\File $file) 
+    public function parse(SplFileInfo $file) 
     {
         $parser = new Parser();
         $array = $parser->parse(file_get_contents($file->getRealPath()));
