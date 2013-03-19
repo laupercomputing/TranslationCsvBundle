@@ -3,7 +3,6 @@ TranslationCsvBundle
 
 [![Build Status](https://travis-ci.org/laupercomputing/TranslationCsvBundle.png?branch=master)](https://travis-ci.org/laupercomputing/TranslationCsvBundle)
 
-
 ## Documentation
 
 For documentation, see:
