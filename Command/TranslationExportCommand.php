@@ -21,6 +21,7 @@ class TranslationExportCommand extends ContainerAwareCommand
             ->setName('translation:export')
             ->setDescription('Export the translation keys to csv')
             ->addArgument('languages', InputArgument::REQUIRED, 'languages which should be exported (comma seperated 2 char identifies like en,fr)')
+            ->addOption('excel', 'e', NULL, 'transforms output to excel charset')
         ;
     }
 
