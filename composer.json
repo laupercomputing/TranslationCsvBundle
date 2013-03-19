@@ -1,0 +1,25 @@
+{
+  "name": "laupercomputing/translation-csv-bundle",
+  "description": "Bundle which exports/imports the translations to/from csv",
+  "keywords": ["translation", "csv"],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kreemer",
+      "email": "kreemer@me.com"
+    }
+  ],
+  "require": {
+    "symfony/framework-bundle": ">=2.0,<2.4-dev",
+    "symfony/finder": ">=2.0,<2.4-dev",
+    "symfony/console": ">=2.0,<2.4-dev"
+  },
+  "require-dev": {
+    "symfony/yaml": ">=2.0,<2.4-dev"
+  },
+  "autoload": {
+    "psr-0": { "LPC\\TranslationExportBundle": "" }
+  },
+  "target-dir": "LPC/TranslationExportBundle",
+}
