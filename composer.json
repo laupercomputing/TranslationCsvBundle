@@ -16,10 +16,11 @@
     "symfony/console": ">=2.0,<2.4-dev"
   },
   "require-dev": {
-    "symfony/yaml": ">=2.0,<2.4-dev"
+    "symfony/yaml": ">=2.0,<2.4-dev",
+    "mikey179/vfsStream": "1.1.*@stable"
   },
   "autoload": {
-    "psr-0": { "LPC\\TranslationExportBundle": "" }
+    "psr-0": { "LPC\\TranslationCsvBundle": "" }
   },
-  "target-dir": "LPC/TranslationExportBundle",
+  "target-dir": "LPC/TranslationCsvBundle"
 }
