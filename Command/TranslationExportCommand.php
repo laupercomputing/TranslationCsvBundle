@@ -21,7 +21,7 @@ class TranslationExportCommand extends ContainerAwareCommand
             ->setName('translation:export')
             ->setDescription('Export the translation keys to csv')
             ->addArgument('languages', InputArgument::REQUIRED, 'languages which should be exported (comma seperated 2 char identifies like en,fr)')
-            ->addOption('excel', 'e', NULL, 'transforms output to excel charset')
+            //->addOption('excel', 'e', NULL, 'transforms output to excel charset')
         ;
     }
 
@@ -29,7 +29,7 @@ class TranslationExportCommand extends ContainerAwareCommand
     {
         $languages = explode(',', $input->getArgument('languages'));
         
-        $path = $this->getContainer()->get('kernel.path');
+        $path = $this->getContainer()->get('kernel')->getRootDir() . '/../';
         $driver = new \LPC\TranslationCsvBundle\Finder\Driver\YamlDriver();
         $translationFinder = new \LPC\TranslationCsvBundle\Finder\TranslationFinder($driver);
         $files = $translationFinder->getTranslateFiles($path);
@@ -61,7 +61,7 @@ class TranslationExportCommand extends ContainerAwareCommand
                         if ($index + 1 < count($languages)) {
                             $output->write(',');
                         } else {
-                            $output->writeln();
+                            $output->writeln('');
                         }
                     }
                     

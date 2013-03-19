@@ -2,7 +2,7 @@
 
 namespace LPC\TranslationCsvBundle\Finder\Driver;
 
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Finder\SplFileInfo;
 
 interface Driver
 {
@@ -14,8 +14,8 @@ interface Driver
     /**
      * return all translations (key => value paired)
      * 
-     * @param \Symfony\Component\HttpFoundation\File\File $file
+     * @param SplFileInfo $file
      * @return array
      */
-    public function parse(File $file);
+    public function parse(SplFileInfo $file);
 }
