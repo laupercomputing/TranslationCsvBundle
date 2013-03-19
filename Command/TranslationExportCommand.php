@@ -27,6 +27,46 @@ class TranslationExportCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
+        $languages = explode(',', $input->getArgument('languages'));
+        
+        $path = $this->getContainer()->get('kernel.path');
+        $driver = new \LPC\TranslationCsvBundle\Finder\Driver\YamlDriver();
+        $translationFinder = new \LPC\TranslationCsvBundle\Finder\TranslationFinder($driver);
+        $files = $translationFinder->getTranslateFiles($path);
+        $translations = array();
+        foreach ($files as $file) {
+            $translations = $translationFinder->getTranslations($file, $translations);
+        }
+        
+        $output->writeln('path,domain,format,' . implode(',', $languages));
+        
+        foreach ($translations as $domains) {
+            foreach($domains as $formats) {
+                foreach ($formats as $translation)
+                {
+                    $values = $translation->getTranslations();
+                    
+                    $output->write(
+                        $translation->getPath() . ',' . 
+                        $translation->getDomain() . ',' . 
+                        $translation->getFormat() . ','
+                    );
+                    
+                    foreach ($languages as $index => $lang) {
+                        if (isset($values[$lang])) {
+                            $output->write($values[$lang]);
+                        } else {
+                            $output->write('');
+                        }
+                        if ($index + 1 < count($languages)) {
+                            $output->write(',');
+                        } else {
+                            $output->writeln();
+                        }
+                    }
+                    
+                }
+            }
+        }
     }
 }
