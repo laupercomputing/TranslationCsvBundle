@@ -2,7 +2,6 @@
 
 namespace LPC\TranslationCsvBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use LPC\TranslationCsvBundle\Translation;
 
 /**
@@ -11,7 +10,7 @@ use LPC\TranslationCsvBundle\Translation;
  * @author Kreemer <kreemer@me.com>
  * @package LPCTranslationCsvBundle
  */
-class TranslationTest extends WebTestCase
+class TranslationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Translation 
