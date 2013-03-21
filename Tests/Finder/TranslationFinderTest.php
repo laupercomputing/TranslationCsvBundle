@@ -2,7 +2,6 @@
 
 namespace LPC\TranslationCsvBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use LPC\TranslationCsvBundle\Finder\TranslationFinder;
 use LPC\TranslationCsvBundle\Finder\Driver\Driver;
 use org\bovigo\vfs\vfsStream;
@@ -14,7 +13,7 @@ use LPC\TranslationCsvBundle\Translation;
  * @author Kreemer <kreemer@me.com>
  * @package LPCTranslationCsvBundle
  */
-class TranslationFinderTest extends WebTestCase
+class TranslationFinderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TranslationFinder
@@ -57,7 +56,7 @@ class TranslationFinderTest extends WebTestCase
      */
     public function getNoTranslatableFilesWhenNothingExists()
     {
-        $array = $this->object->getTranslateFiles(vfsStream::url('root'));
+        $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
         
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
@@ -69,7 +68,7 @@ class TranslationFinderTest extends WebTestCase
     public function getNoTranslatableFilesWhenNotInSubdirOfResources()
     {
         vfsStream::create(array('file.txt' => 'test'));
-        $array = $this->object->getTranslateFiles(vfsStream::url('root'));
+        $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
         
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
@@ -85,7 +84,7 @@ class TranslationFinderTest extends WebTestCase
             ->will($this->returnValue('yml'));
 
         vfsStream::create(array('test' => array('Resources' => array('translations' => array('file.txt' => 'test')))));
-        $array = $this->object->getTranslateFiles(vfsStream::url('root'));
+        $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
         
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
@@ -101,7 +100,7 @@ class TranslationFinderTest extends WebTestCase
             ->will($this->returnValue('yml'));
 
         vfsStream::create(array('test' => array('Resources' => array('translations' => array('file.yml' => 'test')))));
-        $array = $this->object->getTranslateFiles(vfsStream::url('root'));
+        $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(1, $array);
         foreach ($array as $file) {
@@ -119,7 +118,7 @@ class TranslationFinderTest extends WebTestCase
             ->will($this->returnValue('yml'));
 
         vfsStream::create(array('test' => array('Resources' => array('translations' => array('file.yml' => 'test', 'file2.yml' => 'test')))));
-        $array = $this->object->getTranslateFiles(vfsStream::url('root'));
+        $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(2, $array);
     }

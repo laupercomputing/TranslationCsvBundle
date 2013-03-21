@@ -21,24 +21,32 @@ class TranslationExportCommand extends ContainerAwareCommand
             ->setName('translation:export')
             ->setDescription('Export the translation keys to csv')
             ->addArgument('languages', InputArgument::REQUIRED, 'languages which should be exported (comma seperated 2 char identifies like en,fr)')
-            //->addOption('excel', 'e', NULL, 'transforms output to excel charset')
+            ->addArgument('directory', InputArgument::OPTIONAL, 'path to root of the symfony2 application')
+            //->addOption('excel', null, null, 'transforms output to excel charset')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $languages = explode(',', $input->getArgument('languages'));
+        $directory = $input->getArgument('directory');
+        if ($directory != null && trim($directory) !== '' && file_exists($directory)) {
+            $path = realpath($directory);
+        } else {
+            $path = realpath($this->getContainer()->get('kernel')->getRootDir() . '/../');    
+        }
         
-        $path = $this->getContainer()->get('kernel')->getRootDir() . '/../';
         $driver = new \LPC\TranslationCsvBundle\Finder\Driver\YamlDriver();
         $translationFinder = new \LPC\TranslationCsvBundle\Finder\TranslationFinder($driver);
         $files = $translationFinder->getTranslateFiles($path);
         $translations = array();
         foreach ($files as $file) {
-            $translations = $translationFinder->getTranslations($file, $translations);
+            $translations = array_merge(
+                $translations, 
+                $translationFinder->getTranslations($file, $translations)
+            );
         }
-        
-        $output->writeln('path,domain,format,' . implode(',', $languages));
+        $output->writeln('path,domain,format,key,' . implode(',', $languages));
         
         foreach ($translations as $domains) {
             foreach($domains as $formats) {
@@ -49,7 +57,8 @@ class TranslationExportCommand extends ContainerAwareCommand
                     $output->write(
                         $translation->getPath() . ',' . 
                         $translation->getDomain() . ',' . 
-                        $translation->getFormat() . ','
+                        $translation->getFormat() . ',' . 
+                        $translation->getKey() . ','
                     );
                     
                     foreach ($languages as $index => $lang) {

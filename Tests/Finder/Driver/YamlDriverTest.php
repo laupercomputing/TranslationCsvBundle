@@ -2,7 +2,6 @@
 
 namespace LPC\TranslationCsvBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use LPC\TranslationCsvBundle\Finder\Driver\YamlDriver;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
@@ -13,7 +12,7 @@ use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
  * @author Kreemer <kreemer@me.com>
  * @package LPCTranslationCsvBundle
  */
-class YamlDriverTest extends WebTestCase
+class YamlDriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var YamlDriver 

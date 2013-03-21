@@ -28,9 +28,14 @@ class YamlDriver implements Driver
     {
         $parser = new Parser();
         $array = $parser->parse(file_get_contents($file->getRealPath()));
+        
         return $this->flatten($array);
     }
     
+    /**
+     * @param array $array
+     * @param string $prefix
+     */
     protected function flatten($array, $prefix = '')
     {
         $return = array();

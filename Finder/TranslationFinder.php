@@ -41,9 +41,23 @@ class TranslationFinder
             throw new InvalidArgumentException();
         }
         $finder = new Finder();
+        if (file_exists($path . 'app') && file_exists($path . 'src')) {
+            return $finder->files()
+                ->in($path . 'app')
+                ->in($path . 'src')
+                ->path('Resources/translations')
+                ->notPath('cache')
+                ->notPath('logs')
+                ->notPath('Tests')
+                ->name('*.' . $this->driver->getFileExtension())
+                ->getIterator();
+        }
         return $finder->files()
                 ->in($path)
                 ->path('Resources/translations')
+                ->notPath('cache')
+                ->notPath('logs')
+                ->notPath('Tests')
                 ->name('*.' . $this->driver->getFileExtension())
                 ->getIterator();
     }
@@ -65,18 +79,16 @@ class TranslationFinder
         
         foreach ($translations as $translationKey => $translation) {
             $checked = false;
-            
             // check if translation already exists
             if (isset($translationArray[$file->getPath()][$domain])) {
                 foreach ($translationArray[$file->getPath()][$domain] as $trans) {
                     if ($trans->getKey() == $translationKey) {
                         $checked = true;
                         $trans->addTranslation($language, $translation);
+                        break;
                     }
-                    continue;
                 }
             } 
-            
             // doesnt exist --> create one
             if (!$checked) {
                 $trans = new Translation();
