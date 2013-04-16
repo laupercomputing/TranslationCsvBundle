@@ -34,6 +34,7 @@ class TranslationFinder
      * 
      * @param string $path
      * @return array
+     * @throws InvalidArgumentException
      */
     public function getTranslateFiles($path)
     {
@@ -65,8 +66,8 @@ class TranslationFinder
     /**
      * returns Translation POPO Objects for Translations
      * 
-     * @param File $file
-     * @param translationArray $array
+     * @param SplFileInfo $file
+     * @param array $translationArray
      * @return array
      */
     public function getTranslations(SplFileInfo $file, $translationArray = array())

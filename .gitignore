@@ -5,3 +5,5 @@ composer.lock
 /manifests
 /Vagrantfile
 /vres
+/.vagrant
+/.idea

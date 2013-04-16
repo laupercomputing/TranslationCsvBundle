@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use LPC\TranslationCsvBundle\Finder\Driver\YamlDriver;
+use LPC\TranslationCsvBundle\Finder\TranslationFinder;
 
 /**
  * Class TranslationExportCommand
@@ -15,6 +17,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TranslationExportCommand extends ContainerAwareCommand
 {
+    /**
+     * configure this command
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this
@@ -22,10 +29,18 @@ class TranslationExportCommand extends ContainerAwareCommand
             ->setDescription('Export the translation keys to csv')
             ->addArgument('languages', InputArgument::REQUIRED, 'languages which should be exported (comma seperated 2 char identifies like en,fr)')
             ->addArgument('directory', InputArgument::OPTIONAL, 'path to root of the symfony2 application')
+            ->addArgument('format', InputArgument::OPTIONAL, 'the format of the source translation files (default is YAML, valid entries are: yml)')
             //->addOption('excel', null, null, 'transforms output to excel charset')
         ;
     }
 
+    /**
+     * execute the command
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $languages = explode(',', $input->getArgument('languages'));
@@ -33,11 +48,18 @@ class TranslationExportCommand extends ContainerAwareCommand
         if ($directory != null && trim($directory) !== '' && file_exists($directory)) {
             $path = realpath($directory);
         } else {
-            $path = realpath($this->getContainer()->get('kernel')->getRootDir() . '/../');    
+            $path = realpath($this->getContainer()->get('kernel')->getRootDir() . '/../');
         }
-        
-        $driver = new \LPC\TranslationCsvBundle\Finder\Driver\YamlDriver();
-        $translationFinder = new \LPC\TranslationCsvBundle\Finder\TranslationFinder($driver);
+
+        $format = $input->getArgument('format');
+        switch (strtolower($format)) {
+            case 'yml':
+            case 'yaml':
+            default:
+                $driver = new YamlDriver();
+                break;
+        }
+        $translationFinder = new TranslationFinder($driver);
         $files = $translationFinder->getTranslateFiles($path);
         $translations = array();
         foreach ($files as $file) {
@@ -73,7 +95,6 @@ class TranslationExportCommand extends ContainerAwareCommand
                             $output->writeln('');
                         }
                     }
-                    
                 }
             }
         }
