@@ -53,9 +53,10 @@ class TranslationExportCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->commandTester->execute(
             array(
-                'command' => $this->command->getName(),
+                'command'   => $this->command->getName(),
                 'languages' => 'de',
                 'directory' => __DIR__ . '/../Root',
+                'format'    => 'yml'
             )
         );
 

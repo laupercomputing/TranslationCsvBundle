@@ -23,6 +23,7 @@ class YamlDriver implements Driver
 
     /**
      * @param SplFileInfo $file
+     * @return array
      */
     public function parse(SplFileInfo $file) 
     {
@@ -35,6 +36,7 @@ class YamlDriver implements Driver
     /**
      * @param array $array
      * @param string $prefix
+     * @return array
      */
     protected function flatten($array, $prefix = '')
     {
