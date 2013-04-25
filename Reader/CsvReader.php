@@ -33,6 +33,7 @@ class CsvReader extends Reader
 
     /**
      * return all translation keys
+     *
      * @return array
      */
     public function getTranslations()

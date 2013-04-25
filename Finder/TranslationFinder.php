@@ -10,14 +10,14 @@ use LPC\TranslationCsvBundle\Translation;
 use Symfony\Component\Finder\SplFileInfo;
 /**
  * Translation Finder
- * 
+ *
  * @author Kreemer <kreemer@me.com>
  * @package LPCTranslationCsvBundle
  */
 class TranslationFinder
 {
     /**
-     * @var \LPC\TranslationCsvBundle\Finder\Driver\Driver 
+     * @var \LPC\TranslationCsvBundle\Finder\Driver\Driver
      */
     protected $driver;
 
@@ -28,10 +28,10 @@ class TranslationFinder
     {
         $this->driver = $driver;
     }
-    
+
     /**
      * returns all files which can be handled with the driver
-     * 
+     *
      * @param string $path
      * @return array
      * @throws InvalidArgumentException
@@ -62,22 +62,23 @@ class TranslationFinder
                 ->name('*.' . $this->driver->getFileExtension())
                 ->getIterator();
     }
-    
+
     /**
      * returns Translation POPO Objects for Translations
-     * 
+     *
      * @param SplFileInfo $file
-     * @param array $translationArray
+     * @param array       $translationArray
+     * @param string      $path
      * @return array
      */
-    public function getTranslations(SplFileInfo $file, $translationArray = array())
+    public function getTranslations(SplFileInfo $file, $translationArray = array(), $path = '')
     {
         $fileInfos = explode('.', $file->getBasename());
         $domain = $fileInfos[0];
         $language = $fileInfos[1];
-        
+
         $translations = $this->driver->parse($file);
-        
+
         foreach ($translations as $translationKey => $translation) {
             $checked = false;
             // check if translation already exists
@@ -89,22 +90,30 @@ class TranslationFinder
                         break;
                     }
                 }
-            } 
+            }
             // doesnt exist --> create one
             if (!$checked) {
+                $filePath = $file->getPath();
+                if ($path != '') {
+                    $pos = strpos($filePath, $path);
+                    if ($pos !== false) {
+                        $filePath = substr($filePath, $pos + strlen($path));
+                    }
+                }
+
                 $trans = new Translation();
                 $trans->setDomain($domain)
                     ->setFormat($file->getExtension())
                     ->setKey($translationKey)
-                    ->setPath($file->getPath())
+                    ->setPath($filePath)
                     ->addTranslation($language, $translation);
 
                 $translationArray[$file->getPath()][$domain][] = $trans;
-                
+
             }
         }
-        
+
         return $translationArray;
     }
-            
+
 }

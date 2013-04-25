@@ -9,7 +9,7 @@ use LPC\TranslationCsvBundle\Translation;
 
 /**
  * Test for TranslationFinder
- * 
+ *
  * @author Kreemer <kreemer@me.com>
  * @package LPCTranslationCsvBundle
  */
@@ -19,12 +19,12 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
      * @var TranslationFinder
      */
     protected $object;
-    
+
     /**
-     * @var Driver 
+     * @var Driver
      */
     protected $driver;
-    
+
     public function setUp()
     {
         parent::setUp();
@@ -33,7 +33,7 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $this->driver = $this->getMock($driverClass);
         $this->object = new TranslationFinder($this->driver);
     }
-    
+
     /**
      * @test
      */
@@ -41,7 +41,7 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertAttributeSame($this->driver, 'driver', $this->object);
     }
-    
+
     /**
      * @test
      * @expectedException \InvalidArgumentException
@@ -50,18 +50,18 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->getTranslateFiles(1);
     }
-    
+
     /**
      * @test
      */
     public function getNoTranslatableFilesWhenNothingExists()
     {
         $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
-        
+
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
     }
-    
+
     /**
      * @test
      */
@@ -69,11 +69,11 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::create(array('file.txt' => 'test'));
         $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
-        
+
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
     }
-    
+
     /**
      * @test
      */
@@ -85,11 +85,11 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
 
         vfsStream::create(array('test' => array('Resources' => array('translations' => array('file.txt' => 'test')))));
         $array = $this->object->getTranslateFiles(vfsStream::url('root') . '/');
-        
+
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(0, $array);
     }
-    
+
     /**
      * @test
      */
@@ -107,7 +107,7 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('file.yml', $file->getFilename());
         }
     }
-    
+
     /**
      * @test
      */
@@ -122,7 +122,7 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Iterator', $array);
         $this->assertCount(2, $array);
     }
-    
+
     /**
      * @test
      */
@@ -130,30 +130,30 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
     {
         $this->driver->expects($this->once())
             ->method('parse')
-                
+
             ->will($this->returnValue(array('test.test' => 'blapp')));
 
         $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('test.en.yml'));
-        
+
         $file->expects($this->exactly(3))
             ->method('getPath')
             ->will($this->returnValue('/var/test/'));
-        
+
         $file->expects($this->once())
             ->method('getExtension')
             ->will($this->returnValue('yml'));
-        
+
         $transObjects = $this->object->getTranslations($file);
-        
+
         $this->assertCount(1, $transObjects);
         $this->assertCount(1, current($transObjects));
         $this->assertCount(1, current(current($transObjects)));
         $transObject = current(current(current($transObjects)));
         $this->assertInstanceOf(
-            'LPC\TranslationCsvBundle\Translation', 
+            'LPC\TranslationCsvBundle\Translation',
             $transObject
         );
         $this->assertEquals('yml', $transObject->getFormat());
@@ -162,10 +162,10 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test.test', $transObject->getKey());
         $this->assertCount(1, $transObject->getTranslations());
         $this->assertSame(array('en' => 'blapp'), $transObject->getTranslations());
-        
+
         return $transObjects;
     }
-    
+
     /**
      * @test
      * @depends getTranslatablePopo
@@ -180,19 +180,19 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('test.fr.yml'));
-        
+
         $file->expects($this->exactly(2))
             ->method('getPath')
             ->will($this->returnValue('/var/test/'));
-        
+
         $transObjects = $this->object->getTranslations($file, $existingTranslations);
-        
+
         $this->assertCount(1, $transObjects);
         $this->assertCount(1, current($transObjects));
         $this->assertCount(1, current(current($transObjects)));
         $transObject = current(current(current($transObjects)));
         $this->assertInstanceOf(
-            'LPC\TranslationCsvBundle\Translation', 
+            'LPC\TranslationCsvBundle\Translation',
             $transObject
         );
         $this->assertEquals('yml', $transObject->getFormat());
@@ -201,10 +201,10 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test.test', $transObject->getKey());
         $this->assertCount(2, $transObject->getTranslations());
         $this->assertSame(array('en' => 'blapp', 'fr' => 'blupp'), $transObject->getTranslations());
-        
+
         return $transObjects;
     }
-    
+
     /**
      * @test
      * @depends getTranslatablePopoWithTwoFiles
@@ -219,21 +219,21 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('blah.en.yml'));
-        
+
         $file->expects($this->exactly(3))
             ->method('getPath')
             ->will($this->returnValue('/var/test/'));
-        
+
         $file->expects($this->once())
             ->method('getExtension')
             ->will($this->returnValue('yml'));
-        
+
         $transObjects = $this->object->getTranslations($file, $existingTranslations);
-        
+
         $this->assertCount(1, $transObjects);
         $this->assertCount(2, current($transObjects));
     }
-    
+
     /**
      * @test
      * @depends getTranslatablePopoWithTwoFiles
@@ -248,19 +248,48 @@ class TranslationFinderTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())
             ->method('getBasename')
             ->will($this->returnValue('blah.en.yml'));
-        
+
         $file->expects($this->exactly(3))
             ->method('getPath')
             ->will($this->returnValue('/var/test1/'));
-        
+
         $file->expects($this->once())
             ->method('getExtension')
             ->will($this->returnValue('yml'));
-        
+
         $transObjects = $this->object->getTranslations($file, $existingTranslations);
-        
+
         $this->assertCount(2, $transObjects);
     }
-    
-    
+
+    /**
+     * @test
+     * @depends getTranslatablePopo
+     */
+    public function substitutePath($existingTranslations)
+    {
+        /*$this->driver->expects($this->once())
+            ->method('parse')
+            ->will($this->returnValue(array('test.test' => 'blupp')));
+
+        $file = $this->getMock('Symfony\Component\Finder\SplFileInfo', array(), array(), '', false);
+        $file->expects($this->once())
+            ->method('getBasename')
+            ->will($this->returnValue('blah.en.yml'));
+
+        $file->expects($this->exactly(3))
+            ->method('getPath')
+            ->will($this->returnValue('/var/test1/'));
+
+        $file->expects($this->once())
+            ->method('getExtension')
+            ->will($this->returnValue('yml'));
+
+        $transObjects = $this->object->getTranslations($file, array(), '/var/');
+
+        $this->assertCount(1, $transObjects);
+        $transObject = current($transObjects);
+
+        $this->assertEquals('test1/', $transObject->getPath());*/
+    }
 }
