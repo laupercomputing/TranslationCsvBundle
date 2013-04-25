@@ -11,6 +11,8 @@
 namespace LPC\TranslationCsvBundle\Command;
 
 use LPC\TranslationCsvBundle\Import\CsvImporter;
+use LPC\TranslationCsvBundle\Reader\CsvReader;
+use LPC\TranslationCsvBundle\Writer\YamlWriter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,12 +41,28 @@ class TranslationImportCommand extends ContainerAwareCommand
             ->addArgument('languages', InputArgument::REQUIRED, 'languages which should be imported (comma seperated 2 char identifies like en,fr)')
             ->addArgument('directory', InputArgument::OPTIONAL, 'path to root of the symfony2 application')
             ->addArgument('force-format', InputArgument::OPTIONAL, 'forces the format of the destination translation files (valid entries are: yml)')
-            //->addOption('excel', null, null, 'transforms output to excel charset')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $directory = $input->getArgument('directory');
+        if ($directory != null && trim($directory) !== '' && file_exists($directory)) {
+            $path = realpath($directory);
+        } else {
+            $path = realpath($this->getContainer()->get('kernel')->getRootDir() . '/../');
+        }
+
+        $languages = explode(',', $input->getArgument('languages'));
+
+        $csvReader = new CsvReader($input->getArgument('file'));
+        $ymlWriter = new YamlWriter();
+
+        $translations = $csvReader->getTranslations();
+        $processedTranslations = $ymlWriter->processTranslations($translations, $languages);
+
+        $ymlWriter->writeToFile($processedTranslations, $path);
+
 
 
     }
