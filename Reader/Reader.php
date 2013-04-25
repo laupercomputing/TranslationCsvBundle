@@ -10,6 +10,13 @@
 
 namespace LPC\TranslationCsvBundle\Reader;
 
+use LPC\TranslationCsvBundle\Translation;
+
+/**
+ * Class Reader
+ *
+ * @package LPC\TranslationCsvBundle\Reader
+ */
 abstract class Reader
 {
     /**
@@ -25,18 +32,4 @@ abstract class Reader
      * @return array
      */
     abstract public function getTranslations();
-
-    /**
-     * Build an associative array, key is the filepath, value is the content
-     *
-     * @return array
-     */
-    public function prepareWrite()
-    {
-        $translations = $this->getTranslations();
-
-        foreach ($translations as $translation) {
-
-        }
-    }
 }
