@@ -64,25 +64,25 @@ class TranslationExportCommand extends ContainerAwareCommand
         $translations = array();
         foreach ($files as $file) {
             $translations = array_merge(
-                $translations, 
-                $translationFinder->getTranslations($file, $translations)
+                $translations,
+                $translationFinder->getTranslations($file, $translations, $path)
             );
         }
         $output->writeln('path,domain,format,key,' . implode(',', $languages));
-        
+
         foreach ($translations as $domains) {
             foreach($domains as $formats) {
                 foreach ($formats as $translation)
                 {
                     $values = $translation->getTranslations();
-                    
+
                     $output->write(
-                        $translation->getPath() . ',' . 
-                        $translation->getDomain() . ',' . 
-                        $translation->getFormat() . ',' . 
+                        $translation->getPath() . ',' .
+                        $translation->getDomain() . ',' .
+                        $translation->getFormat() . ',' .
                         $translation->getKey() . ','
                     );
-                    
+
                     foreach ($languages as $index => $lang) {
                         if (isset($values[$lang])) {
                             $output->write($values[$lang]);
